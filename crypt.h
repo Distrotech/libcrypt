@@ -6,6 +6,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <mpi.h>
+#include <stdint.h>
 
 /* version */
 #define CRYPT   0x0003
@@ -49,7 +50,7 @@ struct rc6_key {
 };
 
 struct saferp_key {
-   unsigned char K[33][16];
+   uint8_t K[33][16];
    int rounds;
 };
 
@@ -68,14 +69,14 @@ union symmetric_key {
 /* A block cipher CBC structure */
 struct symmetric_CBC {
    int                 cipher, blocklen;
-   unsigned char       IV[32];
+   uint8_t       IV[32];
    union symmetric_key key;
 };
 
 /* A block cipher CTR structure */
 struct symmetric_CTR {
    int                 cipher, blocklen;
-   unsigned char       ctr[32];
+   uint8_t       ctr[32];
    union symmetric_key key;
 };
 
@@ -83,67 +84,67 @@ struct symmetric_CTR {
 extern  struct _cipher_descriptor {
    char *name;
    int  min_key_length, max_key_length, block_length, default_rounds;
-   int  (*setup)(unsigned char *key, int keylength, int num_rounds, union symmetric_key *skey);
-   void (*ecb_encrypt)(unsigned char *pt, unsigned char *ct, union symmetric_key *key);
-   void (*ecb_decrypt)(unsigned char *ct, unsigned char *pt, union symmetric_key *key);
+   int  (*setup)(uint8_t *key, int keylength, int num_rounds, union symmetric_key *skey);
+   void (*ecb_encrypt)(uint8_t *pt, uint8_t *ct, union symmetric_key *key);
+   void (*ecb_decrypt)(uint8_t *ct, uint8_t *pt, union symmetric_key *key);
    int (*test)(void);
 } cipher_descriptor[];
 
-extern int blowfish_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_key *skey);
-extern void blowfish_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *key);
-extern void blowfish_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *key);
+extern int blowfish_setup(uint8_t *key, int keylen, int num_rounds, union symmetric_key *skey);
+extern void blowfish_ecb_encrypt(uint8_t *pt, uint8_t *ct, union symmetric_key *key);
+extern void blowfish_ecb_decrypt(uint8_t *ct, uint8_t *pt, union symmetric_key *key);
 extern int blowfish_test(void);
 
-extern int rc5_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_key *skey);
-extern void rc5_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *key);
-extern void rc5_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *key);
+extern int rc5_setup(uint8_t *key, int keylen, int num_rounds, union symmetric_key *skey);
+extern void rc5_ecb_encrypt(uint8_t *pt, uint8_t *ct, union symmetric_key *key);
+extern void rc5_ecb_decrypt(uint8_t *ct, uint8_t *pt, union symmetric_key *key);
 extern int rc5_test(void);
 
-extern int rc6_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_key *skey);
-extern void rc6_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *key);
-extern void rc6_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *key);
+extern int rc6_setup(uint8_t *key, int keylen, int num_rounds, union symmetric_key *skey);
+extern void rc6_ecb_encrypt(uint8_t *pt, uint8_t *ct, union symmetric_key *key);
+extern void rc6_ecb_decrypt(uint8_t *ct, uint8_t *pt, union symmetric_key *key);
 extern int rc6_test(void);
 
-extern int saferp_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_key *skey);
-extern void saferp_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *key);
-extern void saferp_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *key);
+extern int saferp_setup(uint8_t *key, int keylen, int num_rounds, union symmetric_key *skey);
+extern void saferp_ecb_encrypt(uint8_t *pt, uint8_t *ct, union symmetric_key *key);
+extern void saferp_ecb_decrypt(uint8_t *ct, uint8_t *pt, union symmetric_key *key);
 extern int saferp_test(void);
 
-extern int serpent_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_key *skey);
-extern void serpent_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *key);
-extern void serpent_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *key);
+extern int serpent_setup(uint8_t *key, int keylen, int num_rounds, union symmetric_key *skey);
+extern void serpent_ecb_encrypt(uint8_t *pt, uint8_t *ct, union symmetric_key *key);
+extern void serpent_ecb_decrypt(uint8_t *ct, uint8_t *pt, union symmetric_key *key);
 extern int serpent_test(void);
 
-extern int cbc_start(int cipher, unsigned char *IV, unsigned char *key, int keylen, int num_rounds, struct symmetric_CBC *cbc);
-extern void cbc_encrypt(unsigned char *pt, unsigned char *ct, struct symmetric_CBC *cbc);
-extern void cbc_decrypt(unsigned char *ct, unsigned char *pt, struct symmetric_CBC *cbc);
+extern int cbc_start(int cipher, uint8_t *IV, uint8_t *key, int keylen, int num_rounds, struct symmetric_CBC *cbc);
+extern void cbc_encrypt(uint8_t *pt, uint8_t *ct, struct symmetric_CBC *cbc);
+extern void cbc_decrypt(uint8_t *ct, uint8_t *pt, struct symmetric_CBC *cbc);
 
-extern int ctr_start(int cipher, unsigned char *count, unsigned char *key, int keylen, int num_rounds, struct symmetric_CTR *ctr);
-extern void ctr_encrypt(unsigned char *pt, unsigned char *ct, int len, struct symmetric_CTR *ctr);
-extern void ctr_decrypt(unsigned char *ct, unsigned char *pt, int len, struct symmetric_CTR *ctr);
+extern int ctr_start(int cipher, uint8_t *count, uint8_t *key, int keylen, int num_rounds, struct symmetric_CTR *ctr);
+extern void ctr_encrypt(uint8_t *pt, uint8_t *ct, int len, struct symmetric_CTR *ctr);
+extern void ctr_decrypt(uint8_t *ct, uint8_t *pt, int len, struct symmetric_CTR *ctr);
 	
 extern int find_cipher(char *name);
 
 /* ---- HASH FUNCTIONS ---- */
 struct sha256_state {
     unsigned long state[8], length, curlen;
-    unsigned char buf[64];
+    uint8_t buf[64];
 };
 
 struct sha1_state {
     unsigned long state[5], length, curlen;
-    unsigned char buf[64];
+    uint8_t buf[64];
 };
 
 struct md5_state {
     unsigned long state[4], length, curlen;
-    unsigned char buf[64];
+    uint8_t buf[64];
 };
 
 struct tiger_state {
     unsigned long long state[3];
     unsigned long length, curlen;
-    unsigned char buf[64];
+    uint8_t buf[64];
 };
 
 union hash_state {
@@ -157,39 +158,39 @@ extern struct _hash_descriptor {
     char *name;
     int hashsize;
     void (*init)(union hash_state *);
-    void (*process)(union hash_state *, unsigned char *, int);
-    void (*done)(union hash_state *, unsigned char *);
+    void (*process)(union hash_state *, uint8_t *, int);
+    void (*done)(union hash_state *, uint8_t *);
     int  (*test)(void);
 } hash_descriptor[];
 
 extern void sha256_init(union hash_state * md);
-extern void sha256_process(union hash_state * md, unsigned char *buf, int len);
-extern void sha256_done(union hash_state * md, unsigned char *hash);
+extern void sha256_process(union hash_state * md, uint8_t *buf, int len);
+extern void sha256_done(union hash_state * md, uint8_t *hash);
 extern int  sha256_test(void);
 
 extern void sha1_init(union hash_state * md);
-extern void sha1_process(union hash_state * md, unsigned char *buf, int len);
-extern void sha1_done(union hash_state * md, unsigned char *hash);
+extern void sha1_process(union hash_state * md, uint8_t *buf, int len);
+extern void sha1_done(union hash_state * md, uint8_t *hash);
 extern int  sha1_test(void);
 
 extern void md5_init(union hash_state * md);
-extern void md5_process(union hash_state * md, unsigned char *buf, int len);
-extern void md5_done(union hash_state * md, unsigned char *hash);
+extern void md5_process(union hash_state * md, uint8_t *buf, int len);
+extern void md5_done(union hash_state * md, uint8_t *hash);
 extern int  md5_test(void);
 
 extern void tiger_init(union hash_state * md);
-extern void tiger_process(union hash_state * md, unsigned char *buf, int len);
-extern void tiger_done(union hash_state * md, unsigned char *hash);
+extern void tiger_process(union hash_state * md, uint8_t *buf, int len);
+extern void tiger_done(union hash_state * md, uint8_t *hash);
 extern int  tiger_test(void);
 
 extern int find_hash(char *name);
-extern int hash_memory(int hash, unsigned char *data, int len, unsigned char *dst);
-extern int hash_file(int hash, char *fname, unsigned char *dst);
+extern int hash_memory(int hash, uint8_t *data, int len, uint8_t *dst);
+extern int hash_file(int hash, char *fname, uint8_t *dst);
 
 /* ---- PRNG Stuff ---- */
 struct yarrow_prng {
     int                   cipher, hash, clen, hlen, bl;
-    unsigned char         pool[32], buf[32];
+    uint8_t         pool[32], buf[32];
     struct symmetric_CTR  ctr;
     union hash_state      md;
 };
@@ -201,15 +202,15 @@ union prng_state {
 extern struct _prng_descriptor {
     char *name;
     int (*start)(union prng_state *);
-    int (*add_entropy)(unsigned char *, int, union prng_state *);
+    int (*add_entropy)(char *, int, union prng_state *);
     int (*ready)(union prng_state *);
-    int (*read)(unsigned char *, int len, union prng_state *);
+    int (*read)(uint8_t *, int len, union prng_state *);
 } prng_descriptor[];
 
 extern int yarrow_start(union prng_state *prng);
-extern int yarrow_add_entropy(unsigned char *buf, int len, union prng_state *prng);
+extern int yarrow_add_entropy(char *buf, int len, union prng_state *prng);
 extern int yarrow_ready(union prng_state *prng);
-extern int yarrow_read(unsigned char *buf, int len, union prng_state *prng);
+extern int yarrow_read(uint8_t *buf, int len, union prng_state *prng);
 
 extern int find_prng(char *name);
 
@@ -229,26 +230,26 @@ struct rsa_key {
 };
 
 extern int rsa_make_key(union prng_state *prng, int wprng, int size, long e, struct rsa_key *key);
-extern int rsa_exptmod(unsigned char *in, int inlen, unsigned char *out, int *outlen, int which, struct rsa_key *key);
-extern int rsa_pad(unsigned char *in, int inlen, unsigned char *out, int *outlen, int wprng, union prng_state *prng);
-extern int rsa_depad(unsigned char *in, int inlen, unsigned char *out, int *outlen);
+extern int rsa_exptmod(uint8_t *in, int inlen, uint8_t *out, int *outlen, int which, struct rsa_key *key);
+extern int rsa_pad(uint8_t *in, int inlen, uint8_t *out, int *outlen, int wprng, union prng_state *prng);
+extern int rsa_depad(uint8_t *in, int inlen, uint8_t *out, int *outlen);
 extern void rsa_free(struct rsa_key *key);
 
-extern int rsa_encrypt(unsigned char *in, int len, unsigned char *out, int *outlen,
+extern int rsa_encrypt(uint8_t *in, int len, uint8_t *out, int *outlen,
                        union prng_state *prng, int wprng, int cipher, struct rsa_key *key);
 
-extern int rsa_decrypt(unsigned char *in, int len, unsigned char *out, int *outlen, struct rsa_key *key);
+extern int rsa_decrypt(uint8_t *in, int len, uint8_t *out, int *outlen, struct rsa_key *key);
 
-extern int rsa_sign(unsigned char *in, int inlen, unsigned char *out, int *outlen, int hash, 
+extern int rsa_sign(char *in, int inlen, uint8_t *out, int *outlen, int hash, 
                     union prng_state *prng, int wprng, struct rsa_key *key);
 
-extern int rsa_verify(unsigned char *sig, unsigned char *msg, int inlen, int *stat, struct rsa_key *key);
+extern int rsa_verify(char *sig, char *msg, int inlen, int *stat, struct rsa_key *key);
 
-extern int rsa_export(unsigned char *out, int *outlen, int type, struct rsa_key *key);
-extern int rsa_import(unsigned char *in, struct rsa_key *key);
+extern int rsa_export(uint8_t *out, int *outlen, int type, struct rsa_key *key);
+extern int rsa_import(uint8_t *in, struct rsa_key *key);
 
 /* ---- BASE64 Routines ---- */
-extern int base64_encode(unsigned char *in, int len, unsigned char *out, int *outlen);
-extern int base64_decode(unsigned char *in, int len, unsigned char *out, int *outlen);
+extern int base64_encode(uint8_t *in, int len, uint8_t *out, int *outlen);
+extern int base64_decode(uint8_t *in, int len, uint8_t *out, int *outlen);
 
 #endif /* CRYPT_H_ */

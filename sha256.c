@@ -81,7 +81,7 @@ void sha256_init(union hash_state * md)
     md->sha256.state[7] = 0x5BE0CD19UL;
 }
 
-void sha256_process(union hash_state * md, unsigned char *buf, int len)
+void sha256_process(union hash_state * md, uint8_t *buf, int len)
 {
     while (len--) {
         /* copy byte */
@@ -96,7 +96,7 @@ void sha256_process(union hash_state * md, unsigned char *buf, int len)
     }
 }
 
-void sha256_done(union hash_state * md, unsigned char *hash)
+void sha256_done(union hash_state * md, uint8_t *hash)
 {
     int i;
 
@@ -137,14 +137,14 @@ void sha256_done(union hash_state * md, unsigned char *hash)
 
 int sha256_test(void)
 {
-  static unsigned char hash[32] = { 
+  static uint8_t hash[32] = { 
      0xba, 0x78, 0x16, 0xbf, 0x8f, 0x01, 0xcf, 0xea, 0x41, 0x41, 0x40, 0xde,
      0x5d, 0xae, 0x22, 0x23, 0xb0, 0x03, 0x61, 0xa3, 0x96, 0x17, 0x7a, 0x9c,
      0xb4, 0x10, 0xff, 0x61, 0xf2, 0x00, 0x15, 0xad };
-  static unsigned char *message = "abc";
-  unsigned char tmp[32];
+  static char *message = "abc";
+  uint8_t tmp[32];
 
-  if (hash_memory(find_hash("sha256"), message, strlen(message), tmp) == CRYPT_ERROR) return CRYPT_ERROR;
+  if (hash_memory(find_hash("sha256"), (uint8_t*)message, strlen(message), tmp) == CRYPT_ERROR) return CRYPT_ERROR;
 
   if (memcmp(tmp, hash, 32)) { crypt_error = "MD5 hash did not match test vector."; return CRYPT_ERROR; }
   return CRYPT_OK;

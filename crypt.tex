@@ -122,10 +122,10 @@ There are a few helper macros to make the coding process a bit easier.  The firs
 
 \begin{center}
 \begin{tabular}{|c|c|c|}
-     \hline STORE32L(x, y) & {\bf unsigned long} x, {\bf unsigned char} *y & $x \to y[0 \ldots 3]$ \\
-     \hline STORE64L(x, y) & {\bf unsigned long long} x, {\bf unsigned char} *y & $x \to y[0 \ldots 7]$ \\
-     \hline LOAD32L(x, y) & {\bf unsigned long} x, {\bf unsigned char} *y & $y[0 \ldots 3] \to x$ \\
-     \hline LOAD64L(x, y) & {\bf unsigned long long} x, {\bf unsigned char} *y & $y[0 \ldots 7] \to x$ \\
+     \hline STORE32L(x, y) & {\bf unsigned long} x, {\bf uint8_t} *y & $x \to y[0 \ldots 3]$ \\
+     \hline STORE64L(x, y) & {\bf unsigned long long} x, {\bf uint8_t} *y & $x \to y[0 \ldots 7]$ \\
+     \hline LOAD32L(x, y) & {\bf unsigned long} x, {\bf uint8_t} *y & $y[0 \ldots 3] \to x$ \\
+     \hline LOAD64L(x, y) & {\bf unsigned long long} x, {\bf uint8_t} *y & $y[0 \ldots 7] \to x$ \\
      \hline BSWAP(x) & {\bf unsigned long} x & Swaps the byte order of x. \\
      \hline
 \end{tabular}
@@ -149,7 +149,7 @@ the output will be stored.  For example:
 #include <crypt.h>
 int main(void) {
     struct rsa_key key;
-    unsigned char buffer[1024];
+    uint8_t buffer[1024];
     int x;
 
     /* ... Make up the key somehow */
@@ -174,7 +174,7 @@ libcrypt provides several block ciphers all in a plain vanila ECB block mode.  A
 a single union called ``symmetric\_key''.  This allows all ciphers to have the same prototype and store their keys as 
 naturally as possible.  All ciphers provide four visible functions which are (given that XXX is the name of the cipher):
 \begin{verbatim}
-int XXX_setup(unsigned char *key, int keylen, int rounds, 
+int XXX_setup(uint8_t *key, int keylen, int rounds, 
               union symmetric_key *skey);
 \end{verbatim}
 
@@ -183,10 +183,10 @@ The number of rounds can be set to zero to use the default.  It returns {\bf CRY
 invalid such as an incorrect key size or number of rounds.  If the cipher is setup correctly it returns {\bf CRYPT\_OK}.
 
 \begin{verbatim}
-void XXX_ecb_encrypt(unsigned char *pt, unsigned char *ct,
+void XXX_ecb_encrypt(uint8_t *pt, uint8_t *ct,
                      union symmetric_key *skey);
 
-void XXX_ecb_decrypt(unsigned char *ct, unsigned char *pt,
+void XXX_ecb_decrypt(uint8_t *ct, uint8_t *pt,
                      union symmetric_key *skey);
 \end{verbatim}
 
@@ -206,7 +206,7 @@ An example snippet that encodes a block with Blowfish in ECB mode is below.
 #include <crypt.h>
 int main(void)
 { 
-    unsigned char pt[8], ct[8], key[8];
+    uint8_t pt[8], ct[8], key[8];
     union symmetric_key skey;
     int x;
 
@@ -239,11 +239,11 @@ struct _cipher_descriptor {
    char *name;
    int  min_key_length, max_key_length, 
         block_length, default_rounds;
-   int  (*setup)      (unsigned char *key, int keylength, 
+   int  (*setup)      (uint8_t *key, int keylength, 
                        int num_rounds, union symmetric_key *skey);
-   void (*ecb_encrypt)(unsigned char *pt, unsigned char *ct, 
+   void (*ecb_encrypt)(uint8_t *pt, uint8_t *ct, 
                        union symmetric_key *key);
-   void (*ecb_decrypt)(unsigned char *ct, unsigned char *pt, 
+   void (*ecb_decrypt)(uint8_t *ct, uint8_t *pt, 
                        union symmetric_key *key);
    int (*test)        (void);
 };
@@ -292,10 +292,10 @@ The library provides simple support routines for handling CBC and CTR encoded me
 is XXX there is a structure called ``{\bf struct symmetric\_XXX}'' that will contain the information required to
 use that mode.  They have virtually identical setup routines:
 \begin{verbatim}
-int cbc_start(int cipher, unsigned char *IV, unsigned char *key, 
+int cbc_start(int cipher, uint8_t *IV, uint8_t *key, 
               int keylen, int num_rounds, struct symmetric_CBC *cbc);
 
-int ctr_start(int cipher, unsigned char *count, unsigned char *key, 
+int ctr_start(int cipher, uint8_t *count, uint8_t *key, 
               int keylen, int num_rounds, struct symmetric_CTR *ctr);
 \end{verbatim}
 
@@ -308,14 +308,14 @@ the mode of operation.
 Both routines return {\bf CRYPT\_OK} if the cipher initialized correctly, otherwise they return {\bf CRYPT\_ERROR}.  To 
 actually encrypt or decrypt the following routines are provided:
 \begin{verbatim}
-void cbc_encrypt(unsigned char *pt, unsigned char *ct, 
+void cbc_encrypt(uint8_t *pt, uint8_t *ct, 
                  struct symmetric_CBC *cbc);
-void cbc_decrypt(unsigned char *ct, unsigned char *pt,
+void cbc_decrypt(uint8_t *ct, uint8_t *pt,
                  struct symmetric_CBC *cbc);
 
-void ctr_encrypt(unsigned char *pt, unsigned char *ct, 
+void ctr_encrypt(uint8_t *pt, uint8_t *ct, 
                  int len, struct symmetric_CTR *ctr);
-void ctr_decrypt(unsigned char *ct, unsigned char *pt, 
+void ctr_decrypt(uint8_t *ct, uint8_t *pt, 
                  int len, struct symmetric_CTR *ctr);
 \end{verbatim}
 
@@ -339,7 +339,7 @@ void XXX_init(union hash_state *md);
 This simply sets up the hash to the default state governed by the specifications of the hash.  To add data to the 
 message being hashed call:
 \begin{verbatim}
-void XXX_process(unsigned char *in, int len, 
+void XXX_process(uint8_t *in, int len, 
                  union hash_state *md);
 \end{verbatim}
 
@@ -348,7 +348,7 @@ buffered.  You pass pieces of the data at a time to the process function.  To fi
 call:
 \begin{verbatim}
 void XXX_done(union hash_state *md, 
-              unsigned char *out);
+              uint8_t *out);
 \end{verbatim}
 
 This function will finish up the hash and store the result in the ``out'' array.  You must ensure that ``out'' is long
@@ -364,7 +364,7 @@ example snippet that hashes a message with md5 is given below.
 int main(void)
 {
     union hash_state md;
-    unsigned char *in = "hello world", out[16];
+    uint8_t *in = "hello world", out[16];
 
     /* setup the hash */
     md5_init(&md);
@@ -389,9 +389,9 @@ struct _hash_descriptor {
     int hashsize;
     void (*init)   (union hash_state *);
     void (*process)(union hash_state *, 
-                    unsigned char *, int);
+                    uint8_t *, int);
     void (*done)   (union hash_state *, 
-                    unsigned char *);
+                    uint8_t *);
     int  (*test)   (void);
 };
 \end{verbatim}
@@ -403,11 +403,11 @@ position in the descriptor table of the hash.
 
 There are two helper functions as well:
 \begin{verbatim}
-int hash_memory(int hash, unsigned char *data, 
-                int len, unsigned char *dst);
+int hash_memory(int hash, uint8_t *data, 
+                int len, uint8_t *dst);
 
 int hash_file(int hash, char *fname, 
-              unsigned char *dst);
+              uint8_t *dst);
 \end{verbatim}
 
 Both functions return {\bf CRYPT\_OK} on success, otherwise they return {\bf CRYPT\_ERROR}.  The ``hash'' parameter is
@@ -442,7 +442,7 @@ This will setup the PRNG but not seed it.  Returns {\bf CRYPTO\_ERROR} if there 
 cryptographically useful you must give it entropy.  Ideally you'd have some OS level source to tap like in UNIX.  Since 
 this is a portable library I leave it upto you to figure this one out.  Nyah Nyah!.  To add entropy to the PRNG call:
 \begin{verbatim}
-int XXX_add_entropy(unsigned char *in, int len, 
+int XXX_add_entropy(uint8_t *in, int len, 
                     union prng_state *prng);
 \end{verbatim}
 
@@ -454,7 +454,7 @@ int XXX_ready(union prng_state *prng);
 
 Which returns {\bf CRYPTO\_OK} if it is ready.  Finally to actually read bytes call:
 \begin{verbatim}
-int XXX_read(unsigned char *out, int len,
+int XXX_read(uint8_t *out, int len,
              union prng_state *prng);
 \end{verbatim}
 
@@ -474,7 +474,7 @@ snippet to read 10 bytes from yarrow is below.
 int main(void)
 {
    union prng_state prng;
-   unsigned char buf[10];
+   uint8_t buf[10];
 
    /* start it */
    yarrow_start(&prng);
@@ -497,10 +497,10 @@ PRNGs have descriptors too (surprised?). Stored in the structure ``prng\_descrip
 struct _prng_descriptor {
     char *name;
     int (*start)      (union prng_state *);
-    int (*add_entropy)(unsigned char *, int, 
+    int (*add_entropy)(uint8_t *, int, 
                        union prng_state *);
     int (*ready)      (union prng_state *);
-    int (*read)       (unsigned char *, int len, 
+    int (*read)       (uint8_t *, int len, 
                        union prng_state *);
 };
 \end{verbatim}
@@ -528,8 +528,8 @@ enough to prevent trivial math attacks and not super slow.  ``key'' is where the
 
 Todo raw work with the RSA function call:
 \begin{verbatim}
-int rsa_exptmod(unsigned char *in, int inlen, 
-                unsigned char *out, int *outlen, 
+int rsa_exptmod(uint8_t *in, int inlen, 
+                uint8_t *out, int *outlen, 
                 int which, struct rsa_key *key);
 \end{verbatim}
 This loads the bignum from ``in'' as a little endian word, raises it to either ``e'' or ``d'' and stores the result
@@ -542,8 +542,8 @@ function returns {\bf CRYPT\_ERROR} on error.
 The remaining RSA functions are non-standard but should (to the best of my knowledge) be secure if used correctly.  To
 encrypt a buffer of memory in a hybrid fashion call:
 \begin{verbatim}
-int rsa_encrypt(unsigned char *in, int len, 
-                unsigned char *out, int *outlen,
+int rsa_encrypt(uint8_t *in, int len, 
+                uint8_t *out, int *outlen,
                 union prng_state *prng, int wprng, 
                 int cipher, struct rsa_key *key);
 \end{verbatim}
@@ -552,18 +552,18 @@ This will encrypt the message with the cipher specified by ``cipher'' under a ra
 the length in ``outlen''.  You must ensure that ``outlen'' is set to the buffer size before calling this.  This returns
 {\bf CRYPT\_ERROR} on error.  To decrypt packets made by this routine call:
 \begin{verbatim}
-int rsa_decrypt(unsigned char *in, int len, 
-                unsigned char *out, int *outlen, 
+int rsa_decrypt(uint8_t *in, int len, 
+                uint8_t *out, int *outlen, 
                 struct rsa_key *key);
 \end{verbatim}
 Which works akin to rsa\_encrypt().  Similarly to sign/verify there are:
 \begin{verbatim}
-int rsa_sign(unsigned char *in, int inlen, 
-             unsigned char *out, int *outlen, int hash, 
+int rsa_sign(uint8_t *in, int inlen, 
+             uint8_t *out, int *outlen, int hash, 
              union prng_state *prng, int wprng, struct rsa_key *key);
 
-int rsa_verify(unsigned char *sig, 
-               unsigned char *msg, 
+int rsa_verify(uint8_t *sig, 
+               uint8_t *msg, 
                int inlen, int *stat, 
                struct rsa_key *key);
 \end{verbatim}
@@ -572,10 +572,10 @@ The verify function sets ``stat'' to 1 if it passes or to 0 if it fails.  The ``
 rsa\_sign() function and ``msg'' is the original msg that was signed.  To import/export RSA keys as a memory buffer (
 e.g. to store them to disk) call:
 \begin{verbatim}
-int rsa_export(unsigned char *out, int *outlen, 
+int rsa_export(uint8_t *out, int *outlen, 
                int type, struct rsa_key *key);
 
-int rsa_import(unsigned char *in, struct rsa_key *key);
+int rsa_import(uint8_t *in, struct rsa_key *key);
 \end{verbatim}
 
 To free the memory used by an RSA key call:

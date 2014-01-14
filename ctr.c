@@ -1,6 +1,6 @@
 #include "crypt.h"
 
-int ctr_start(int cipher, unsigned char *count, unsigned char *key, int keylen, int num_rounds, struct symmetric_CTR *ctr)
+int ctr_start(int cipher, uint8_t *count, uint8_t *key, int keylen, int num_rounds, struct symmetric_CTR *ctr)
 {
    int x;
 
@@ -17,9 +17,9 @@ int ctr_start(int cipher, unsigned char *count, unsigned char *key, int keylen, 
    return CRYPT_OK;
 }
 
-void ctr_encrypt(unsigned char *pt, unsigned char *ct, int len, struct symmetric_CTR *ctr)
+void ctr_encrypt(uint8_t *pt, uint8_t *ct, int len, struct symmetric_CTR *ctr)
 {
-   unsigned char buf[32];
+   uint8_t buf[32];
    int x;
 
    /* increment counter */
@@ -34,7 +34,7 @@ void ctr_encrypt(unsigned char *pt, unsigned char *ct, int len, struct symmetric
    memset(buf, 0, sizeof(buf));
 }
 
-void ctr_decrypt(unsigned char *ct, unsigned char *pt, int len, struct symmetric_CTR *ctr)
+void ctr_decrypt(uint8_t *ct, uint8_t *pt, int len, struct symmetric_CTR *ctr)
 {
    ctr_encrypt(ct, pt, len, ctr);
 }

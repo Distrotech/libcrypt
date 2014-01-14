@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdint.h>
 
 #if MP_DEBUG
 #include <stdio.h>
@@ -2182,11 +2183,11 @@ void   mp_print(mp_int *mp, FILE *ofp)
    Read in a raw value (base 256) into the given mp_int
  */
 
-mp_err  mp_read_raw(mp_int *mp, char *str, int len)
+mp_err  mp_read_raw(mp_int *mp, uint8_t *str, int len)
 {
   int            ix;
   mp_err         res;
-  unsigned char *ustr = (unsigned char *)str;
+  uint8_t *ustr = (uint8_t* )str;
 
   ARGCHK(mp != NULL && str != NULL && len > 0, MP_BADARG);
 
@@ -2226,7 +2227,7 @@ int    mp_raw_size(mp_int *mp)
 
 /* {{{ mp_toraw(mp, str) */
 
-mp_err mp_toraw(mp_int *mp, char *str)
+mp_err mp_toraw(mp_int *mp, uint8_t *str)
 {
   int  ix, jx, pos = 1;
 

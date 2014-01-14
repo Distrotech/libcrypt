@@ -10,11 +10,11 @@ int yarrow_start(union prng_state *prng)
    return CRYPT_OK;
 }
 
-int yarrow_add_entropy(unsigned char *buf, int len, union prng_state *prng)
+int yarrow_add_entropy(char *buf, int len, union prng_state *prng)
 {
    int x;
-   unsigned char tmp[32];
-   if (hash_memory(prng->yarrow.hash, buf, len, tmp) == CRYPT_ERROR) return CRYPT_ERROR;
+   uint8_t tmp[32];
+   if (hash_memory(prng->yarrow.hash, (uint8_t*)buf, len, tmp) == CRYPT_ERROR) return CRYPT_ERROR;
    for (x = 0; x < hash_descriptor[prng->yarrow.hash].hashsize; x++)
        prng->yarrow.pool[x] ^= tmp[x];
    memset(tmp, 0, 32);
@@ -31,7 +31,7 @@ int yarrow_ready(union prng_state *prng)
    return CRYPT_OK;
 }
 
-int yarrow_read(unsigned char *buf, int len, union prng_state *prng)
+int yarrow_read(uint8_t *buf, int len, union prng_state *prng)
 {
    int x = len;
    while (x--) {

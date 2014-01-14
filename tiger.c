@@ -591,7 +591,7 @@ void tiger_init(union hash_state *md)
     md->tiger.curlen = md->tiger.length = 0;
 }
 
-void tiger_process(union hash_state * md, unsigned char *buf, int len)
+void tiger_process(union hash_state * md, uint8_t *buf, int len)
 {
     while (len--) {
         /* copy byte */
@@ -606,7 +606,7 @@ void tiger_process(union hash_state * md, unsigned char *buf, int len)
     }
 }
 
-void tiger_done(union hash_state * md, unsigned char *hash)
+void tiger_done(union hash_state * md, uint8_t *hash)
 {
     unsigned long i;
 
@@ -648,13 +648,13 @@ void tiger_done(union hash_state * md, unsigned char *hash)
 
 int tiger_test(void)
 {
-   static unsigned char md[24] = {
+   static uint8_t md[24] = {
         0x2a, 0xab, 0x14, 0x84, 0xe8, 0xc1, 0x58, 0xf2, 0xbf, 0xb8, 0xc5, 0xff, 
         0x41, 0xb5, 0x7a, 0x52, 0x51, 0x29, 0x13, 0x1c, 0x95, 0x7b, 0x5f, 0x93 };
    char *message = "abc";
-   unsigned char tmp[24];
+   uint8_t tmp[24];
 
-  if (hash_memory(find_hash("tiger"), message, strlen(message), tmp) == CRYPT_ERROR) return CRYPT_ERROR;
+  if (hash_memory(find_hash("tiger"), (uint8_t*)message, strlen(message), tmp) == CRYPT_ERROR) return CRYPT_ERROR;
   if (memcmp(tmp, md, 24)) { crypt_error = "Hash did not match test vector for tiger."; return CRYPT_ERROR; }
   return CRYPT_OK;
 }

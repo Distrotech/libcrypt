@@ -13,6 +13,7 @@
 #define _H_MPI_
 
 #include <mpi-config.h>
+#include <stdint.h>
 
 #if MP_DEBUG
 #undef MP_IOFUNC
@@ -171,9 +172,9 @@ void   mp_print(mp_int *mp, FILE *ofp);
 #define BITS     1
 #define BYTES    CHAR_BIT
 
-mp_err mp_read_raw(mp_int *mp, char *str, int len);
+mp_err mp_read_raw(mp_int *mp, uint8_t *str, int len);
 int    mp_raw_size(mp_int *mp);
-mp_err mp_toraw(mp_int *mp, char *str);
+mp_err mp_toraw(mp_int *mp, uint8_t *str);
 mp_err mp_read_radix(mp_int *mp, char *str, int radix);
 int    mp_radix_size(mp_int *mp, int radix);
 int    mp_value_radix_size(int num, int qty, int radix);

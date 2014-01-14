@@ -1,6 +1,6 @@
 #include "crypt.h"
 
-int hash_memory(int hash, unsigned char *data, int len, unsigned char *dst)
+int hash_memory(int hash, uint8_t *data, int len, uint8_t *dst)
 {
     union hash_state md;
 
@@ -13,11 +13,11 @@ int hash_memory(int hash, unsigned char *data, int len, unsigned char *dst)
     return CRYPT_OK;
 }
 
-int hash_file(int hash, char *fname, unsigned char *dst)
+int hash_file(int hash, char *fname, uint8_t *dst)
 {
     union hash_state md;
     FILE *in;
-    unsigned char buf[512];
+    uint8_t buf[512];
     int x;
 
     if (hash == -1) { crypt_error = "Invalid hash passed to hash_memory()."; return CRYPT_ERROR; }

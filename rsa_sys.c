@@ -16,10 +16,10 @@ offset    |  length   |    Contents
 
 */
 
-int rsa_encrypt(unsigned char *in, int len, unsigned char *out, int *outlen,
+int rsa_encrypt(uint8_t *in, int len, uint8_t *out, int *outlen,
                 union prng_state *prng, int wprng, int cipher, struct rsa_key *key)
 {
-   unsigned char sym_IV[32], sym_key[32], rsa_in[4096], rsa_out[4096];
+   uint8_t sym_IV[32], sym_key[32], rsa_in[4096], rsa_out[4096];
    struct symmetric_CTR ctr;
    int x, y, z, keylen, blklen, rsa_size;
 
@@ -96,9 +96,9 @@ int rsa_encrypt(unsigned char *in, int len, unsigned char *out, int *outlen,
    return CRYPT_OK;
 }
 
-int rsa_decrypt(unsigned char *in, int len, unsigned char *out, int *outlen, struct rsa_key *key)
+int rsa_decrypt(uint8_t *in, int len, uint8_t *out, int *outlen, struct rsa_key *key)
 {
-   unsigned char sym_IV[32], sym_key[32], rsa_in[4096], rsa_out[4096];
+   uint8_t sym_IV[32], sym_key[32], rsa_in[4096], rsa_out[4096];
    struct symmetric_CTR ctr;
    int x, y, z, keylen, blklen, rsa_size, cipher;
 
@@ -111,7 +111,7 @@ int rsa_decrypt(unsigned char *in, int len, unsigned char *out, int *outlen, str
    }
 
    /* grab cipher name */
-   cipher = find_cipher(&in[4]);
+   cipher = find_cipher((char*)&in[4]);
    if (cipher == -1) {
       crypt_error = "Invalid cipher name for rsa_decrypt().";
       return CRYPT_ERROR;
@@ -178,11 +178,11 @@ offset    |  length   |    Contents
 8+n       |    p      | the rsa_pad'ed signature
 */
 
-int rsa_sign(unsigned char *in, int inlen, unsigned char *out, int *outlen, int hash, 
+int rsa_sign(char *in, int inlen, uint8_t *out, int *outlen, int hash, 
              union prng_state *prng, int wprng, struct rsa_key *key)
 {
    int hashlen, rsa_size, x, y;
-   unsigned char rsa_in[4096], rsa_out[4096];
+   uint8_t rsa_in[4096], rsa_out[4096];
 
    /* are the parameters valid? */
    if (wprng  == -1) { crypt_error = "Invalid PRNG passed to rsa_sign()."; return CRYPT_ERROR; }
@@ -190,7 +190,7 @@ int rsa_sign(unsigned char *in, int inlen, unsigned char *out, int *outlen, int 
 
    /* hash it */
    hashlen = hash_descriptor[hash].hashsize;
-   if (hash_memory(hash, in, inlen, rsa_in) == CRYPT_ERROR) return CRYPT_ERROR;
+   if (hash_memory(hash, (uint8_t*)in, inlen, rsa_in) == CRYPT_ERROR) return CRYPT_ERROR;
 
    /* pad it */
    x = sizeof(rsa_in);
@@ -229,10 +229,10 @@ int rsa_sign(unsigned char *in, int inlen, unsigned char *out, int *outlen, int 
    return CRYPT_OK;
 }
 
-int rsa_verify(unsigned char *sig, unsigned char *msg, int inlen, int *stat, struct rsa_key *key)
+int rsa_verify(char *sig, char *msg, int inlen, int *stat, struct rsa_key *key)
 {
    int hash, hashlen, rsa_size, x, y, z;
-   unsigned char rsa_in[4096], rsa_out[4096];
+   uint8_t rsa_in[4096], rsa_out[4096];
 
    /* always be correct by default */
    *stat = 1;
@@ -270,7 +270,7 @@ int rsa_verify(unsigned char *sig, unsigned char *msg, int inlen, int *stat, str
 
    /* check? */
    if (z != hashlen) *stat = 0;
-   hash_memory(hash, msg, inlen, rsa_out);
+   hash_memory(hash, (uint8_t*)msg, inlen, rsa_out);
    if (memcmp(rsa_out, rsa_in, hashlen)) *stat = 0;
 
    memset(rsa_in, 0, sizeof(rsa_in));

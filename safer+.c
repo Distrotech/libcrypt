@@ -67,7 +67,7 @@
 	iSHUF(b, b2); iPHT(b2);
 
 
-const static unsigned char ebox[256] = {
+const static uint8_t ebox[256] = {
   1,  45, 226, 147, 190,  69,  21, 174, 120,   3, 135, 164, 184,  56, 207,  63, 
   8, 103,   9, 148, 235,  38, 168, 107, 189,  24,  52,  27, 187, 191, 114, 247, 
  64,  53,  72, 156,  81,  47,  59,  85, 227, 192, 159, 216, 211, 243, 141, 177, 
@@ -86,7 +86,7 @@ const static unsigned char ebox[256] = {
 225, 102, 221, 179,  88, 105,  99,  86,  15, 161,  49, 149,  23,   7,  58,  40
 };
 
-const static unsigned char lbox[256] = {
+const static uint8_t lbox[256] = {
 128,   0, 176,   9,  96, 239, 185, 253,  16,  18, 159, 228, 105, 186, 173, 248, 
 192,  56, 194, 101,  79,   6, 148, 252,  25, 222, 106,  27,  93,  78, 168, 130, 
 112, 237, 232, 236, 114, 179,  21, 195, 255, 171, 182,  71,  68,   1, 172,  37, 
@@ -105,7 +105,7 @@ const static unsigned char lbox[256] = {
 184,  64, 120,  45,  58, 233, 100,  31, 146, 144, 125,  57, 111, 224, 137,  48
 };
 
-const static unsigned char bias[33][16] = {
+const static uint8_t bias[33][16] = {
 {  70, 151, 177, 186, 163, 183,  16,  10, 197,  55, 179, 201,  90,  40, 172, 100},
 { 236, 171, 170, 198, 103, 149,  88,  13, 248, 154, 246, 110, 102, 220,   5,  61},
 { 138, 195, 216, 137, 106, 233,  54,  73,  67, 191, 235, 212, 150, 155, 104, 160},
@@ -139,10 +139,10 @@ const static unsigned char bias[33][16] = {
 {  53,  72, 156,  81,  47,  59,  85, 227, 192, 159, 216, 211, 243, 141, 177, 255},
 {  62, 220, 134, 119, 215, 166,  17, 251, 244, 186, 146, 145, 100, 131, 241,  51}};
 
-int saferp_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_key *skey)
+int saferp_setup(uint8_t *key, int keylen, int num_rounds, union symmetric_key *skey)
 {
    unsigned x, y;
-   unsigned char t[33];
+   uint8_t t[33];
    static int rounds[3] = { 8, 12, 16 };
 
    /* check arguments */
@@ -207,9 +207,9 @@ int saferp_setup(unsigned char *key, int keylen, int num_rounds, union symmetric
    return CRYPT_OK;
 }
 
-void saferp_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *skey)
+void saferp_ecb_encrypt(uint8_t *pt, uint8_t *ct, union symmetric_key *skey)
 {
-   unsigned char b[16];
+   uint8_t b[16];
 
    /* do eight rounds */   
    memcpy(b, pt, 16);
@@ -254,9 +254,9 @@ void saferp_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_ke
    memset(b, 0, 16);
 }
 
-void saferp_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *skey)
+void saferp_ecb_decrypt(uint8_t *ct, uint8_t *pt, union symmetric_key *skey)
 {
-   unsigned char b[16];
+   uint8_t b[16];
 
    /* do eight rounds */
    b[0] = ct[0] ^ skey->saferp.K[skey->saferp.rounds*2][0];
@@ -303,28 +303,28 @@ void saferp_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_ke
 
 int saferp_test(void)
 {
-   static unsigned char key128[16] = 
+   static uint8_t key128[16] = 
 	{ 41, 35, 190, 132, 225, 108, 214, 174, 82, 144, 73, 241, 241, 187, 233, 235 };
-   static unsigned char pt128[16] = 
+   static uint8_t pt128[16] = 
 	{ 179, 166, 219, 60, 135, 12, 62, 153, 36, 94, 13, 28, 6, 183, 71, 222 };
-   static unsigned char ct128[16] =
+   static uint8_t ct128[16] =
         { 224, 31, 182, 10, 12, 255, 84, 70, 127, 13, 89, 249, 9, 57, 165, 220 };
-   static unsigned char key192[24] = 
+   static uint8_t key192[24] = 
         { 72, 211, 143, 117, 230, 217, 29, 42, 229, 192, 247, 43, 120, 129, 135, 68, 14, 95, 80, 0, 212, 97, 141, 190 };
-   static unsigned char pt192[16] = 
+   static uint8_t pt192[16] = 
         { 123, 5, 21, 7, 59, 51, 130, 31, 24, 112, 146, 218, 100, 84, 206, 177 };
-   static unsigned char ct192[16] = 
+   static uint8_t ct192[16] = 
         { 92, 136, 4, 63, 57, 95, 100, 0, 150, 130, 130, 16, 193, 111, 219, 133 };
 
-   static unsigned char key256[32] =
+   static uint8_t key256[32] =
         { 243, 168, 141, 254, 190, 242, 235, 113, 255, 160, 208, 59, 117, 6, 140, 126,
           135, 120, 115, 77, 208, 190, 130, 190, 219, 194, 70, 65, 43, 140, 250, 48 };
-   static unsigned char pt256[16] = 
+   static uint8_t pt256[16] = 
         { 127, 112, 240, 167, 84, 134, 50, 149, 170, 91, 104, 19, 11, 230, 252, 245 };
-   static unsigned char ct256[16] = 
+   static uint8_t ct256[16] = 
         { 88, 11, 25, 36, 172, 229, 202, 213, 170, 65, 105, 153, 220, 104, 153, 138 };
 
-   unsigned char buf[2][16];
+   uint8_t buf[2][16];
    union symmetric_key skey;
 
    /* test 128-bit key */

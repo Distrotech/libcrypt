@@ -1,6 +1,6 @@
 #include "crypt.h"
 
-int rc6_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_key *skey)
+int rc6_setup(uint8_t *key, int keylen, int num_rounds, union symmetric_key *skey)
 {
     unsigned long L[64], S[50], A, B, i, j, v, s, t, l;
 
@@ -50,7 +50,7 @@ int rc6_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_ke
 
 }
 
-void rc6_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *key)
+void rc6_ecb_encrypt(uint8_t *pt, uint8_t *ct, union symmetric_key *key)
 {
    unsigned long a,b,c,d,t,u;
    int r;
@@ -71,7 +71,7 @@ void rc6_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *
    a = b = c = d = t = 0;
 }
 
-void rc6_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *key)
+void rc6_ecb_decrypt(uint8_t *ct, uint8_t *pt, union symmetric_key *key)
 {
    unsigned long a,b,c,d,t,u;
    int r;
@@ -93,13 +93,13 @@ void rc6_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *
 
 int rc6_test(void)
 {
-   static unsigned char key[16] =
+   static uint8_t key[16] =
           { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef, 0x01, 0x12, 0x23, 0x34, 0x45, 0x56, 0x67, 0x78 };
-   static unsigned char pt[16] = 
+   static uint8_t pt[16] = 
           { 0x02, 0x13, 0x24, 0x35, 0x46, 0x57, 0x68, 0x79, 0x8a, 0x9b, 0xac, 0xbd, 0xce, 0xdf, 0xe0, 0xf1 };
-   static unsigned char ct[16] = 
+   static uint8_t ct[16] = 
           { 0x52, 0x4e, 0x19, 0x2f, 0x47, 0x15, 0xc6, 0x23, 0x1f, 0x51, 0xf6, 0x36, 0x7e, 0xa4, 0x3f, 0x18 };
-   unsigned char buf[2][16];
+   uint8_t buf[2][16];
    union symmetric_key skey;
 
    if (rc6_setup(key, 16, 0, &skey) == CRYPT_ERROR) return CRYPT_ERROR;

@@ -275,10 +275,10 @@ static unsigned long F(unsigned long x, union symmetric_key *key)
             key->blowfish.S[3][(x>>0)&255];
 }
 
-int blowfish_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_key *skey)
+int blowfish_setup(uint8_t *key, int keylen, int num_rounds, union symmetric_key *skey)
 {
    unsigned long L[14], x, y, A;
-   unsigned char B[8];
+   uint8_t B[8];
 
    /* check key length */
    if (keylen < 8 || keylen > 56) {
@@ -339,7 +339,7 @@ int blowfish_setup(unsigned char *key, int keylen, int num_rounds, union symmetr
    return CRYPT_OK;
 }
 
-void blowfish_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *key)
+void blowfish_ecb_encrypt(uint8_t *pt, uint8_t *ct, union symmetric_key *key)
 {
    unsigned long L, R, T;
    int i;
@@ -366,7 +366,7 @@ void blowfish_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_
    L = R = T = 0;
 }
 
-void blowfish_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *key)
+void blowfish_ecb_decrypt(uint8_t *ct, uint8_t *pt, union symmetric_key *key)
 {
    unsigned long L, R, T;
    int i;
@@ -396,10 +396,10 @@ void blowfish_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_
 int blowfish_test(void)
 {
    union symmetric_key key;
-   static unsigned char ukey[] = { 0xBA, 0x15, 0xb9, 0x04, 0xb6, 0xb5, 0xfe, 0x43 };
-   static unsigned char pt[]   = { 0x30, 0x44, 0xfd, 0x42, 0xa2, 0x7f, 0x57, 0x59 };
-   static unsigned char ct[]   = { 0xb1, 0x82, 0x38, 0x35, 0x1a, 0x8f, 0xce, 0x09 };
-   unsigned char buf[2][8];
+   static uint8_t ukey[] = { 0xBA, 0x15, 0xb9, 0x04, 0xb6, 0xb5, 0xfe, 0x43 };
+   static uint8_t pt[]   = { 0x30, 0x44, 0xfd, 0x42, 0xa2, 0x7f, 0x57, 0x59 };
+   static uint8_t ct[]   = { 0xb1, 0x82, 0x38, 0x35, 0x1a, 0x8f, 0xce, 0x09 };
+   uint8_t buf[2][8];
 
    /* setup key */
    if (blowfish_setup(ukey, 8, 16, &key) != CRYPT_OK) return CRYPT_ERROR;

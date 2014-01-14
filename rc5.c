@@ -1,6 +1,6 @@
 #include "crypt.h"
 
-int rc5_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_key *skey)
+int rc5_setup(uint8_t *key, int keylen, int num_rounds, union symmetric_key *skey)
 {
     unsigned long L[64], S[50], A, B, i, j, v, s, t, l;
 
@@ -51,7 +51,7 @@ int rc5_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_ke
     return CRYPT_OK;
 }
 
-void rc5_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *key)
+void rc5_ecb_encrypt(uint8_t *pt, uint8_t *ct, union symmetric_key *key)
 {
    unsigned long A, B;
    int r;
@@ -69,7 +69,7 @@ void rc5_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *
    A = B = 0;
 }
 
-void rc5_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *key)
+void rc5_ecb_decrypt(uint8_t *ct, uint8_t *pt, union symmetric_key *key)
 {
    unsigned long A, B;
    int r;
@@ -89,13 +89,13 @@ void rc5_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *
 
 int rc5_test(void)
 {
-   static unsigned char key[16] =
+   static uint8_t key[16] =
           { 0x91, 0x5f, 0x46, 0x19, 0xbe, 0x41, 0xb2, 0x51,  0x63, 0x55, 0xa5, 0x01, 0x10, 0xa9, 0xce, 0x91 };
-   static unsigned char pt[8] = 
+   static uint8_t pt[8] = 
           { 0x21, 0xa5, 0xdb, 0xee, 0x15, 0x4b, 0x8f, 0x6d };
-   static unsigned char ct[8] = 
+   static uint8_t ct[8] = 
           { 0xf7, 0xc0, 0x13, 0xac, 0x5b, 0x2b, 0x89, 0x52 };
-   unsigned char buf[2][8];
+   uint8_t buf[2][8];
    union symmetric_key skey;
 
    if (rc5_setup(key, 16, 12, &skey) == CRYPT_ERROR) return CRYPT_ERROR;

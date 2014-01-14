@@ -102,7 +102,7 @@ done:
 
 int rand_prime(mp_int *N, int len, union prng_state *prng, int wprng)
 {
-   unsigned char buf[4096];
+   uint8_t buf[4096];
    int x;
 
    if (len <= 0 || len > 4095) { crypt_error = "Invalid size for rand_prime()."; return CRYPT_ERROR; }

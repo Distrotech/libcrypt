@@ -61,10 +61,10 @@ void rsa_free(struct rsa_key *key)
    mp_clear(&key->N);
 }
 
-int rsa_exptmod(unsigned char *in, int inlen, unsigned char *out, int *outlen, int which, struct rsa_key *key)
+int rsa_exptmod(uint8_t *in, int inlen, uint8_t *out, int *outlen, int which, struct rsa_key *key)
 {
    mp_int tmp;
-   unsigned char buf[4096];
+   uint8_t buf[4096];
    int x;
 
    if (which == PK_PRIVATE && key->type != PK_PRIVATE) {
@@ -99,9 +99,9 @@ int rsa_exptmod(unsigned char *in, int inlen, unsigned char *out, int *outlen, i
    return CRYPT_OK;
 }
 
-int rsa_pad(unsigned char *in, int inlen, unsigned char *out, int *outlen, int wprng, union prng_state *prng)
+int rsa_pad(uint8_t *in, int inlen, uint8_t *out, int *outlen, int wprng, union prng_state *prng)
 {
-   unsigned char buf[4096];
+   uint8_t buf[4096];
    int x;
 
    /* is output big enough? */
@@ -127,7 +127,7 @@ int rsa_pad(unsigned char *in, int inlen, unsigned char *out, int *outlen, int w
    return CRYPT_OK;
 }
 
-int rsa_depad(unsigned char *in, int inlen, unsigned char *out, int *outlen)
+int rsa_depad(uint8_t *in, int inlen, uint8_t *out, int *outlen)
 {
    int x;
    if (*outlen < inlen/3) { crypt_error = "Output not big enough in rsa_depad()."; return CRYPT_ERROR; }
@@ -136,9 +136,9 @@ int rsa_depad(unsigned char *in, int inlen, unsigned char *out, int *outlen)
    return CRYPT_OK;
 }
 
-int rsa_export(unsigned char *out, int *outlen, int type, struct rsa_key *key)
+int rsa_export(uint8_t *out, int *outlen, int type, struct rsa_key *key)
 {
-   unsigned char buf[4096], buf2[4096];
+   uint8_t buf[4096], buf2[4096];
    int x, y, z, outsize;
 
    /* type valid? */
@@ -187,7 +187,7 @@ int rsa_export(unsigned char *out, int *outlen, int type, struct rsa_key *key)
    return CRYPT_OK;
 }
 
-int rsa_import(unsigned char *in, struct rsa_key *key)
+int rsa_import(uint8_t *in, struct rsa_key *key)
 {
    int x, y;
 

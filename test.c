@@ -3,7 +3,7 @@
 void ecb_tests(void)
 {
  int x;
- unsigned char buf[8];
+ uint8_t buf[8];
  unsigned long L;
  unsigned long long LL;
 
@@ -33,7 +33,7 @@ void cbc_tests(void)
 {
  struct symmetric_CBC cbc;
  int x, y;
- unsigned char blk[32], ct[32], key[32], IV[32];
+ uint8_t blk[32], ct[32], key[32], IV[32];
 
  /* ---- CBC ENCODING ---- */
  /* make up a block and IV */
@@ -68,7 +68,7 @@ void ctr_tests(void)
 {
  struct symmetric_CTR ctr;
  int x, y;
- unsigned char blk[32], ct[32], key[32], count[32];
+ uint8_t blk[32], ct[32], key[32], count[32];
 
  /* ---- CTR ENCODING ---- */
  /* make up a block and IV */
@@ -112,7 +112,7 @@ void hash_tests(void)
 
 void pad_test(void)
 {
- unsigned char in[100], out[100];
+ uint8_t in[100], out[100];
  int x, y;
  union prng_state prng;
  
@@ -142,7 +142,7 @@ void pad_test(void)
 
 void rsa_test(void)
 {
- unsigned char in[4096], out[4096];
+ uint8_t in[4096], out[4096];
  int x, y;
  struct rsa_key key;
  union prng_state prng;
@@ -196,12 +196,12 @@ void rsa_test(void)
     printf("Error: %s\n", crypt_error);
     return;
  }
- if (rsa_verify(in, "hello", 5, &y, &key) == CRYPT_ERROR) { 
+ if (rsa_verify((char*)in, "hello", 5, &y, &key) == CRYPT_ERROR) { 
     printf("Error: %s\n", crypt_error);
     return;
  }
  printf("RSA Signatures: %s, ", (y==1)?"pass":"fail");
- if (rsa_verify(in, "abcde", 5, &y, &key) == CRYPT_ERROR) { 
+ if (rsa_verify((char*)in, "abcde", 5, &y, &key) == CRYPT_ERROR) { 
     printf("Error: %s\n", crypt_error);
     return;
  }
@@ -220,7 +220,7 @@ void rsa_test(void)
     return;
  }
  printf("RSA Import: ");
- if (rsa_verify(in, "abcde", 5, &y, &key) == CRYPT_ERROR) { 
+ if (rsa_verify((char*)in, "abcde", 5, &y, &key) == CRYPT_ERROR) { 
     printf("Error: %s\n", crypt_error);
     return;
  }
@@ -230,7 +230,7 @@ void rsa_test(void)
 
 void base64_test(void)
 {
-   unsigned char buf[2][100];
+   uint8_t buf[2][100];
    int x, y;
 
    memset(buf, 0, 200);

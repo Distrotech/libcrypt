@@ -107,7 +107,7 @@ void md5_init(union hash_state * md)
  md->md5.curlen = md->md5.length = 0;
 }
 
-void md5_process(union hash_state * md, unsigned char *buf, int len)
+void md5_process(union hash_state * md, uint8_t *buf, int len)
 {
     while (len--) {
         /* copy byte */
@@ -122,7 +122,7 @@ void md5_process(union hash_state * md, unsigned char *buf, int len)
     }
 }
 
-void md5_done(union hash_state * md, unsigned char *hash)
+void md5_done(union hash_state * md, uint8_t *hash)
 {
     int i;
 
@@ -163,12 +163,12 @@ void md5_done(union hash_state * md, unsigned char *hash)
 
 int  md5_test(void)
 {
-  static unsigned char hash[16] = { 
+  static uint8_t hash[16] = { 
 	0xf9, 0x6b, 0x69, 0x7d, 0x7c, 0xb7, 0x93, 0x8d, 0x52, 0x5a, 0x2f, 0x31, 0xaa, 0xf1, 0x61, 0xd0 };
-  static unsigned char *message = "message digest";
-  unsigned char tmp[16];
+  static char *message = "message digest";
+  uint8_t tmp[16];
 
-  if (hash_memory(find_hash("md5"), message, strlen(message), tmp) == CRYPT_ERROR) return CRYPT_ERROR;
+  if (hash_memory(find_hash("md5"), (uint8_t*)message, strlen(message), tmp) == CRYPT_ERROR) return CRYPT_ERROR;
   if (memcmp(tmp, hash, 16)) { crypt_error = "MD5 hash did not match test vector."; return CRYPT_ERROR; }
   return CRYPT_OK;
 }

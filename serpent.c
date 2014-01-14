@@ -387,11 +387,11 @@
     c = ROR(c, 3);     \
     a = ROR(a, 13)
 
-int serpent_setup(unsigned char *key, int keylen, int num_rounds, union symmetric_key *skey)
+int serpent_setup(uint8_t *key, int keylen, int num_rounds, union symmetric_key *skey)
 {
     unsigned long lkey[140], t, a, b, c, d, e, f, g, h, x;
     unsigned long t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16;
-    unsigned char buf[32];
+    uint8_t buf[32];
 
     /* check rounds */
     if (num_rounds != 0 && num_rounds != 32) {
@@ -462,7 +462,7 @@ int serpent_setup(unsigned char *key, int keylen, int num_rounds, union symmetri
     return CRYPT_OK;
 }
 
-void serpent_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_key *skey)
+void serpent_ecb_encrypt(uint8_t *pt, uint8_t *ct, union symmetric_key *skey)
 {
     unsigned long a,b,c,d,e,f,g,h;
     unsigned long t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16;
@@ -503,7 +503,7 @@ void serpent_ecb_encrypt(unsigned char *pt, unsigned char *ct, union symmetric_k
     a = b = c = d = e = f = g = h = t1 = t2 = t3 = t4 = t5 = t6 = t7 = t8 = t9 = t10 = t12 = t13 = t14 = t15 = t16 = 0;
 }
 
-void serpent_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_key *skey)
+void serpent_ecb_decrypt(uint8_t *ct, uint8_t *pt, union symmetric_key *skey)
 {
     unsigned long a,b,c,d,e,f,g,h;
     unsigned long t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16;
@@ -546,10 +546,10 @@ void serpent_ecb_decrypt(unsigned char *ct, unsigned char *pt, union symmetric_k
 
 int serpent_test(void)
 {
-   static unsigned char ct[16] = {
+   static uint8_t ct[16] = {
        0xdd, 0xd2, 0x6b, 0x98, 0xa5, 0xff, 0xd8, 0x2c, 0x05, 0x34, 0x5a, 0x9d, 0xad, 0xbf, 0xaf, 0x49 };
-   unsigned char key[16], pt[16];
-   unsigned char tmp[2][16];
+   uint8_t key[16], pt[16];
+   uint8_t tmp[2][16];
    union symmetric_key skey;
  
    memset(pt, 0, 16);

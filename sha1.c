@@ -50,7 +50,7 @@ void sha1_init(union hash_state * md)
  md->sha1.curlen = md->sha1.length = 0;
 }
 
-void sha1_process(union hash_state * md, unsigned char *buf, int len)
+void sha1_process(union hash_state * md, uint8_t *buf, int len)
 {
     while (len--) {
         /* copy byte */
@@ -65,7 +65,7 @@ void sha1_process(union hash_state * md, unsigned char *buf, int len)
     }
 }
 
-void sha1_done(union hash_state * md, unsigned char *hash)
+void sha1_done(union hash_state * md, uint8_t *hash)
 {
     int i;
 
@@ -106,13 +106,13 @@ void sha1_done(union hash_state * md, unsigned char *hash)
 
 int  sha1_test(void)
 {
-  static unsigned char hash[32] = { 
+  static uint8_t hash[32] = { 
       0xa9, 0x99, 0x3e, 0x36, 0x47, 0x06, 0x81, 0x6a,
       0xba, 0x3e, 0x25, 0x71, 0x78, 0x50, 0xc2, 0x6c, 0x9c, 0xd0, 0xd8, 0x9d };
-  static unsigned char *message = "abc";
-  unsigned char tmp[20];
+  static char *message = "abc";
+  uint8_t tmp[20];
 
-  if (hash_memory(find_hash("sha1"), message, strlen(message), tmp) == CRYPT_ERROR) return CRYPT_ERROR;
+  if (hash_memory(find_hash("sha1"), (uint8_t*)message, strlen(message), tmp) == CRYPT_ERROR) return CRYPT_ERROR;
   if (memcmp(tmp, hash, 20)) { crypt_error = "SHA1 hash did not match test vector."; return CRYPT_ERROR; }
   return CRYPT_OK;
 }

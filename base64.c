@@ -1,8 +1,8 @@
 #include "crypt.h"
 
-const static unsigned char *codes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}";
+const static char *codes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}";
 
-const static unsigned char map[256] = {
+const static uint8_t map[256] = {
 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 
 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 
 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 
@@ -26,7 +26,7 @@ const static unsigned char map[256] = {
 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 
 255, 255, 255, 255};
 
-int base64_encode(unsigned char *in, int len, unsigned char *out, int *outlen)
+int base64_encode(uint8_t *in, int len, uint8_t *out, int *outlen)
 {
  unsigned long t;
  int x, y;
@@ -61,7 +61,7 @@ int base64_encode(unsigned char *in, int len, unsigned char *out, int *outlen)
  return CRYPT_OK;
 }
 
-int base64_decode(unsigned char *in, int len, unsigned char *out, int *outlen)
+int base64_decode(uint8_t *in, int len, uint8_t *out, int *outlen)
 {
  unsigned long t, stop;
  int x, y, z;
