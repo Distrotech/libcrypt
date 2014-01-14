@@ -1,3 +1,6 @@
+CYGWIN-SPECIFIC README
+======================
+
 This is the DES-crypt package Version 1.1
 
 It provides a static library libcrypt.a as well as a shared library

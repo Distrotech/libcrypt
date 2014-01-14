@@ -11,25 +11,28 @@ DLLVER=0
 EXE=.exe
 
 STATICLIB=libcrypt.a
-SHAREDLIB=cygcrypt-$(DLLVER).dll
+SHAREDLIB=msys-crypt-$(DLLVER).dll
 IMPORTLIB=libcrypt.dll.a
 
 APPS=crypt$(EXE)
 LIBS=$(STATICLIB) $(SHAREDLIB)
 
+%.o : %.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
+
 all: $(APPS) $(LIBS)
 
 crypt$(EXE): crypt.o $(LIBS)
-	$(CC) -static -o $@ crypt.o -L. -lcrypt
+	$(CC) $(LDFLAGS) -o $@ crypt.o libcrypt.a
 
 $(STATICLIB): encrypt.o
 	ar rv $@ encrypt.o
 
 $(SHAREDLIB): encrypt.o
-	$(CC) -shared -Wl,--out-implib=$(IMPORTLIB) -Wl,--export-all \
+	$(CC) $(LDFLAGS) -shared -Wl,--out-implib=$(IMPORTLIB) -Wl,--export-all \
 	$^ -o $@
 
-encrypt.o: encrypt.h
+encrypt.o: encrypt.c encrypt.h
 
 distclean: clean
 
