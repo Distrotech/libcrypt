@@ -1,6 +1,7 @@
 
-CC:=gcc
+CC:=$(CROSS_PREFIX)gcc
 CFLAGS=-g -O2
+AR=$(CROSS_PREFIX)ar
 
 prefix:=/usr
 bindir=$(prefix)/bin
@@ -26,7 +27,7 @@ crypt$(EXE): crypt.o $(LIBS)
 	$(CC) $(LDFLAGS) -o $@ crypt.o libcrypt.a
 
 $(STATICLIB): encrypt.o
-	ar rv $@ encrypt.o
+	$(AR) rv $@ encrypt.o
 
 $(SHAREDLIB): encrypt.o
 	$(CC) $(LDFLAGS) -shared -Wl,--out-implib=$(IMPORTLIB) -Wl,--export-all \
